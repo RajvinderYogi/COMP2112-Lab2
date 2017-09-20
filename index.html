@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>TACHYONS - Lists | Follower Notifications</title>
+<meta name="description" content="Tachyons Component">
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="author" content="@mrmrs">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+<style>
+  .blue { color: #0074D9; }
+  .bg-blue { background-color: #0074D9; }
+
+  .carbon-poweredby { width: 100%; font-size: 12px; float: left; }
+  .carbon-wrap { float: left; width: 100%; box-sizing: border-box; }
+  .carbon-img  { float: left; width: 50%;  box-sizing: border-box; }
+  .carbon-text  { float: left; width: 50%; padding-left: 16px; box-sizing: border-box; font-size: 12px; }
+
+  #carbonads a:link { text-decoration: none!important; color: #222!important; }
+
+</style>
+<link rel="alternate" type="application/rss+xml" title="RSS Feed for Tachyons Recent Components" href="/components/rss.xml" />
+
+</head>
+<body class="w-100 sans-serif bg-white">
+    <a class="f6 link dim ba bw2 ph3 pv2 ma5 dib black" href="#0">Add 1 Hero</a>
+  
+  <main class="mw6 center">
+  
+      
+  
+    </main>
+      <script>
+        let heroes = [
+  {'name' : 'Prof. Xavier', 'twitter' : '@profx', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0004.gif'},
+  {'name' : 'Spiderman', 'twitter' : '@spidey', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0008.gif'},  
+  {'name' : 'Wolverine', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0011.gif', 'twitter' : '@logan' }
+];
+
+
+let moreHeroes = [
+   {'name' : 'Cyclops', 'twitter' : '@oneye', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0005.gif'},
+   {'name' : 'Storm', 'twitter' : '@rainsitpours', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0007.gif'},
+   {'name' : 'Phoenix', 'twitter' : '@jeangrey', 'pic' : 'http://www.animatedimages.org/data/media/450/animated-marvel-avatar-image-0016.gif'}
+];
+let main = document.querySelector('main');
+
+function render(heroes){
+  main.innerHTML =`${heroes.map((hero, index) =>`<article class="dt w-100 bb b--black-05 pb2 mt2" href="#0">
+      <div class="dtc w2 w3-ns v-mid">
+        <img src="${hero.pic}" class="ba b--black-10 db br-100 w2 w3-ns h2 h3-ns"/>
+      </div>
+      <div class="dtc v-mid pl3">
+        <h1 class="f6 f5-ns fw6 lh-title black mv0">${hero.name} </h1>
+        <h2 class="f6 fw4 mt0 mb0 black-60">${hero.twitter}</h2>
+      </div>
+      <div class="dtc v-mid">
+        <form class="w-100 tr">
+          <button data-id=${index} class="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60" type="submit">${hero.following ? 'Following':'+ Follow'}</button>
+        </form>
+      </div>
+    </article>`
+    ).join('')}
+    `;
+    let btnFollow = Array.from(document.querySelectorAll('[data-id]'));
+    btnFollow.map(btn=>btn.addEventListener('click',function(e){
+      e.preventDefault();
+      if(heroes[this.dataset.id].following === true)
+      {
+        delete heroes[this.dataset.id].following;
+        console.info(`Unfollowed ${heroes[this.dataset.id].name}`);
+        }
+        else{
+          heroes[this.dataset.id].following = true;
+          console.info(`Following ${heroes[this.dataset.id].name}`);
+      }
+      render(heroes);
+    }));
+}
+
+
+
+function* idMaker() {
+  var index = 0;
+  while (index < moreHeroes.length)
+    yield moreHeroes[index++];
+}
+
+var gen = idMaker();
+
+
+let btnAddHero=document.querySelector('a');
+btnAddHero.addEventListener('click',function(event){
+  event.preventDefault();
+  let TempObj=gen.next();
+  TempObj.done?console.log('no more heroes'): heroes.push(TempObj.value);
+  render(heroes); 
+})
+
+render(heroes);
+    </script>
+
+</body>
+</html>
+
+
